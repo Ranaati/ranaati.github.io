@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atif Ali — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0ede8;
+    --muted: #888580;
+    --subtle: #444240;
+    --accent: #c8f060;
+    --accent2: #60d4f0;
+    --accent3: #f0a060;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: #0d0d0d; }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 0 40px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+    font-family: var(--mono);
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 7px 16px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+
+  .nav-cta:hover {
+    background: var(--accent);
+    color: #0d0d0d;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    padding: 120px 40px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 80%);
+  }
+
+  .hero-inner {
+    max-width: 900px;
+    position: relative;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.1s;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.2s;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 560px;
+    margin: 24px 0 44px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.35s;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.5s;
+  }
+
+  .btn-primary {
+    padding: 12px 28px;
+    background: var(--accent);
+    color: #0d0d0d;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: #d9ff6e;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    padding: 12px 28px;
+    border: 1px solid var(--border-hover);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text);
+    transform: translateY(-1px);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 72px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.65s;
+  }
+
+  .stat-item {}
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 100px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+  }
+
+  h2 em { font-style: italic; color: var(--accent); }
+
+  /* ─── ABOUT ─── */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .about-right {}
+
+  .currently-box {
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 24px;
+    background: var(--bg2);
+  }
+
+  .currently-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .currently-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .currently-item:last-child { border-bottom: none; }
+
+  .currently-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 6px;
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .currently-item-text { color: var(--muted); line-height: 1.5; }
+  .currently-item-text strong { color: var(--text); }
+
+  /* ─── SKILLS ─── */
+  #skills { border-top: 1px solid var(--border); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-category {
+    background: var(--bg);
+    padding: 32px;
+    transition: background 0.2s;
+  }
+
+  .skill-category:hover { background: var(--bg2); }
+
+  .skill-cat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-cat-label.frontend { color: var(--accent); }
+  .skill-cat-label.backend { color: var(--accent2); }
+  .skill-cat-label.tools { color: var(--accent3); }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .skill-list li {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.2s;
+  }
+
+  .skill-list li:hover { color: var(--text); }
+
+  .skill-list li::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--subtle);
+    flex-shrink: 0;
+  }
+
+  .skill-badge {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    color: var(--subtle);
+    letter-spacing: 0.05em;
+  }
+
+  .skill-badge.learning {
+    border-color: rgba(200,240,96,0.2);
+    color: rgba(200,240,96,0.5);
+  }
+
+  /* ─── PROJECTS ─── */
+  #projects { border-top: 1px solid var(--border); }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .project-item {
+    background: var(--bg);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: start;
+    transition: background 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .project-item:hover { background: var(--bg2); }
+
+  .project-item:hover .proj-arrow { transform: translate(3px, -3px); }
+
+  .proj-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--subtle);
+    margin-bottom: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .proj-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+
+  .proj-desc {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .proj-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .proj-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    color: var(--subtle);
+    letter-spacing: 0.04em;
+  }
+
+  .proj-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  .proj-arrow {
+    font-size: 20px;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+
+  .proj-status {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    letter-spacing: 0.06em;
+  }
+
+  .proj-status.live {
+    border: 1px solid rgba(200,240,96,0.3);
+    color: var(--accent);
+    background: rgba(200,240,96,0.05);
+  }
+
+  .proj-status.building {
+    border: 1px solid rgba(96,212,240,0.3);
+    color: var(--accent2);
+    background: rgba(96,212,240,0.05);
+  }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { border-top: 1px solid var(--border); }
+
+  .exp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    padding: 36px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exp-item:first-child { border-top: 1px solid var(--border); }
+
+  .exp-left {}
+
+  .exp-period {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--subtle);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .exp-company {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .exp-right {}
+
+  .exp-role {
+    font-family: var(--serif);
+    font-size: 22px;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .exp-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .exp-points li {
+    font-size: 13px;
+    color: var(--muted);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .exp-points li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--subtle);
+    font-size: 11px;
+  }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 120px 40px;
+  }
+
+  #contact h2 { margin-bottom: 16px; }
+
+  .contact-sub {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  .contact-email {
+    font-family: var(--serif);
+    font-size: clamp(24px, 4vw, 40px);
+    color: var(--text);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    transition: border-color 0.2s, color 0.2s;
+    letter-spacing: -0.01em;
+    font-style: italic;
+  }
+
+  .contact-email:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .social-links {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .social-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .social-link:hover { color: var(--accent); }
+
+  .social-link::before {
+    content: '';
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.4;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--subtle);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--subtle); }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    #hero { padding: 100px 20px 60px; }
+    .hero-stats { gap: 28px; flex-wrap: wrap; }
+    section { padding: 70px 20px; }
+    #about .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .project-item { grid-template-columns: 1fr; gap: 20px; padding: 28px 20px; }
+    .exp-item { grid-template-columns: 1fr; gap: 8px; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">atif.dev</a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+  <a href="mailto:ranaatifali007@gmail.com" class="nav-cta">hire me</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">Full-Stack Developer · Perth, Australia</div>
+    <h1>Atif <em>Ali</em></h1>
+    <p class="hero-sub">I build web products that work — from pixel-perfect frontends to scalable backends. 5 years shipping for clients across AU, UK and US. Currently pursuing MS IT (AI & Data Science) at Murdoch University Perth.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View my work</a>
+      <a href="#contact" class="btn-secondary">Get in touch</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">30+</div>
+        <div class="stat-label">projects shipped</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">years experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">countries served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">MS IT</div>
+        <div class="stat-label">Murdoch Univ. 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about">
+  <div class="section-label">01 — about</div>
+  <h2>Developer by craft,<br><em>problem-solver</em> by nature</h2>
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>I'm a full-stack web developer with 5 years of professional experience building and shipping web products for businesses across Pakistan, Australia, the UK, and the US.</p>
+      <p>My background spans the full stack — <strong>React frontends</strong>, <strong>Node.js APIs</strong>, <strong>PHP backends</strong>, <strong>PostgreSQL databases</strong>, and everything in between. I've worked solo, led small teams, and managed client relationships end to end.</p>
+      <p>What separates me from most developers: I think in products, not just code. I've built e-commerce platforms, automated CRM workflows, and integrated payment systems that real businesses depend on every day.</p>
+      <p>I'm now based in Perth, pursuing my <strong>Master of IT in AI & Data Science at Murdoch University</strong> — expanding from web engineering into data-driven product development.</p>
+    </div>
+    <div class="about-right">
+      <div class="currently-box">
+        <div class="currently-label">— currently</div>
+        <div class="currently-item">
+          <div class="currently-dot"></div>
+          <div class="currently-item-text"><strong>Building TradiBoard</strong> — a job management platform for Australian tradespeople</div>
+        </div>
+        <div class="currently-item">
+          <div class="currently-dot" style="animation-delay:0.4s"></div>
+          <div class="currently-item-text"><strong>Learning Python + Pandas</strong> ahead of MS IT semester 1</div>
+        </div>
+        <div class="currently-item">
+          <div class="currently-dot" style="animation-delay:0.8s"></div>
+          <div class="currently-item-text"><strong>Open to part-time roles</strong> in Perth from July 2026</div>
+        </div>
+        <div class="currently-item">
+          <div class="currently-dot" style="animation-delay:1.2s"></div>
+          <div class="currently-item-text"><strong>MS IT (AI & Data Science)</strong> · Murdoch University, Perth · July 2026 intake</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SKILLS ─── -->
+<section id="skills">
+  <div class="section-label">02 — skills</div>
+  <h2>What I build<br><em>with</em></h2>
+  <div class="skills-grid reveal">
+    <div class="skill-category">
+      <div class="skill-cat-label frontend">Frontend</div>
+      <ul class="skill-list">
+        <li>React 18 + TypeScript <span class="skill-badge">strong</span></li>
+        <li>Next.js</li>
+        <li>HTML5 / CSS3</li>
+        <li>Tailwind CSS</li>
+        <li>JavaScript (ES2022+)</li>
+        <li>Bootstrap</li>
+        <li>Figma → Code</li>
+        <li>WordPress + Elementor</li>
+      </ul>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-label backend">Backend & Data</div>
+      <ul class="skill-list">
+        <li>Node.js + Express <span class="skill-badge">strong</span></li>
+        <li>PHP <span class="skill-badge">strong</span></li>
+        <li>PostgreSQL</li>
+        <li>MySQL</li>
+        <li>REST API design</li>
+        <li>Python + Pandas <span class="skill-badge learning">learning</span></li>
+        <li>WooCommerce</li>
+        <li>Prisma ORM</li>
+      </ul>
+    </div>
+    <div class="skill-category">
+      <div class="skill-cat-label tools">Tools & Platforms</div>
+      <ul class="skill-list">
+        <li>Git + GitHub</li>
+        <li>AWS (basics) <span class="skill-badge learning">learning</span></li>
+        <li>Docker <span class="skill-badge learning">learning</span></li>
+        <li>HubSpot CRM</li>
+        <li>GoHighLevel</li>
+        <li>Vercel / Railway</li>
+        <li>Jira + ClickUp</li>
+        <li>Stripe integration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ─── -->
+<section id="projects">
+  <div class="section-label">03 — projects</div>
+  <h2>Things I've<br><em>shipped</em></h2>
+  <div class="projects-list reveal">
+
+    <a href="#" class="project-item">
+      <div class="proj-left">
+        <div class="proj-number">001</div>
+        <div class="proj-title">TradiBoard</div>
+        <div class="proj-desc">A full-stack job management platform built for Australian tradespeople. Handles quotes, client CRM, job status tracking, invoicing, and PDF generation — everything a tradie needs to run their business.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">React</span>
+          <span class="proj-tag">TypeScript</span>
+          <span class="proj-tag">Node.js</span>
+          <span class="proj-tag">PostgreSQL</span>
+          <span class="proj-tag">AWS</span>
+          <span class="proj-tag">Vercel</span>
+        </div>
+      </div>
+      <div class="proj-right">
+        <span class="proj-arrow">↗</span>
+        <span class="proj-status building">in progress</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-item">
+      <div class="proj-left">
+        <div class="proj-number">002</div>
+        <div class="proj-title">Perth Property Tracker</div>
+        <div class="proj-desc">Data dashboard visualising Perth suburb property price trends using public Australian datasets. Combines Python data pipelines with a React frontend — bridging my web and data science background.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">Pandas</span>
+          <span class="proj-tag">React</span>
+          <span class="proj-tag">Recharts</span>
+          <span class="proj-tag">FastAPI</span>
+        </div>
+      </div>
+      <div class="proj-right">
+        <span class="proj-arrow">↗</span>
+        <span class="proj-status building">in progress</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-item">
+      <div class="proj-left">
+        <div class="proj-number">003</div>
+        <div class="proj-title">WP Headless Starter</div>
+        <div class="proj-desc">Open-source starter kit for using WordPress as a headless CMS with a Next.js frontend. Built from patterns across 20+ real client projects. Reusable, well-documented, and production-ready.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Next.js</span>
+          <span class="proj-tag">WordPress REST API</span>
+          <span class="proj-tag">TypeScript</span>
+          <span class="proj-tag">Tailwind</span>
+        </div>
+      </div>
+      <div class="proj-right">
+        <span class="proj-arrow">↗</span>
+        <span class="proj-status live">live</span>
+      </div>
+    </a>
+
+    <a href="#" class="project-item">
+      <div class="proj-left">
+        <div class="proj-number">004</div>
+        <div class="proj-title">E-commerce platforms (client work)</div>
+        <div class="proj-desc">Designed, built, and shipped 20+ WooCommerce and custom e-commerce stores for clients in Australia, UK, and US. Full product catalogues, payment gateways (Stripe, PayPal), shipping integrations, and ongoing maintenance.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">WooCommerce</span>
+          <span class="proj-tag">WordPress</span>
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">Stripe</span>
+          <span class="proj-tag">MySQL</span>
+        </div>
+      </div>
+      <div class="proj-right">
+        <span class="proj-arrow">↗</span>
+        <span class="proj-status live">delivered</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ─── EXPERIENCE ─── -->
+<section id="experience">
+  <div class="section-label">04 — experience</div>
+  <h2>Where I've<br><em>worked</em></h2>
+  <div class="exp-list reveal">
+
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">Mar 2021 – Feb 2026</div>
+        <div class="exp-company">Tatech World</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">Website Developer & Project Manager</div>
+        <ul class="exp-points">
+          <li>Designed and shipped 17+ websites — responsive, performant, and client-ready</li>
+          <li>Led a team of 2–3 developers across 20+ WordPress and WooCommerce projects</li>
+          <li>Implemented and optimised HubSpot, ClickUp, GoHighLevel CRM systems — improving lead conversion rates</li>
+          <li>Converted Figma and PSD designs into production-grade HTML/CSS/JS templates</li>
+          <li>Troubleshot complex security vulnerabilities and implemented Wordfence protection layers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">May 2023 – Jun 2024</div>
+        <div class="exp-company">Freelance (Remote)</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">Freelance Web Developer</div>
+        <ul class="exp-points">
+          <li>Built and launched 20–30 custom WordPress websites for clients in AU, UK, and US</li>
+          <li>Delivered SEO optimisation, performance tuning, and mobile-first responsive builds</li>
+          <li>Conducted user training so clients could manage sites independently post-handoff</li>
+          <li>Integrated third-party APIs and plugins to extend platform functionality</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">Jul 2026 – present</div>
+        <div class="exp-company">Murdoch University</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">Master of IT — AI & Data Science</div>
+        <ul class="exp-points">
+          <li>Specialising in artificial intelligence, machine learning, and data engineering</li>
+          <li>Expanding full-stack background into data-driven application development</li>
+          <li>Perth, Western Australia — available for part-time roles up to 48 hrs/fortnight</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-left">
+        <div class="exp-period">Feb 2016 – Nov 2020</div>
+        <div class="exp-company">GC University Faisalabad</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">Bachelor of Computer Science (BSCS)</div>
+        <ul class="exp-points">
+          <li>Head of Students, CS Department — represented the morning batch to faculty and department head</li>
+          <li>Awarded Benevolent Fund Scholarship (15%)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center">05 — contact</div>
+  <h2>Let's build<br><em>something</em></h2>
+  <p class="contact-sub">I'm open to part-time developer roles in Perth from July 2026. If you're building something interesting and need someone who can ship — reach out.</p>
+  <a href="mailto:ranaatifali007@gmail.com" class="contact-email">ranaatifali007@gmail.com</a>
+  <div class="social-links">
+    <a href="https://linkedin.com/in/atif-ali" class="social-link" target="_blank">LinkedIn</a>
+    <a href="https://github.com/atif-ali-dev" class="social-link" target="_blank">GitHub</a>
+    <a href="#" class="social-link">Resume PDF</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Atif Ali</span>
+  <span>Perth, WA · Open to work</span>
+  <span>Built with HTML · CSS · JS</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      if (window.scrollY >= section.offsetTop - 80) current = section.id;
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === '#' + current
+        ? 'var(--text)' : '';
+    });
+  });
+</script>
+</body>
+</html>
